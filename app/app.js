@@ -1,23 +1,22 @@
-// Helpers
-var findNumberDigitsAfterDot = function(Num) {
-	// Check if Num is an Integer
-	if (Number.isInteger(Num)) {
-		// if its an integer, no length after dot 
-		// cause there's no dot....
-		return 0
-	} else {
-		var NumToString = Num.toString();
-		var Decimal_Place = NumToString.indexOf(".");
-		var trimNumAfterDecimal = NumToString.slice(Decimal_Place + 1, NumToString.length);
-		var lengthAfterDot = trimNumAfterDecimal.length;		
-		return lengthAfterDot
+var RandomHelpers = {
+	hexPasser: function(string) {
+	    var hex = string;
+	    var numberOfCharThatAreHex = (hex.match(/[0-9a-f]/gi)).length;
+	    if (hex.length !== numberOfCharThatAreHex || numberOfCharThatAreHex == null) {
+	    	alert("HexPasser: "+hex+" Not valid Hex");
+	    } else {
+			return hex;    	
+	    }
 	}
 }
 
-// can only round to integers in Javscript
-// but we want to round to floats (0.5, 0.75)
+var hexToNumber = function(hex) {
 
+}
 
+var numberToHex = function(number) {
+
+}
 
 var Random = {
 	//////////////////////////////
@@ -32,9 +31,8 @@ var Random = {
 	    var inv = 1.0 / step;
 	    return Math.round(value * inv) / inv;
 	},
-
-
 	Between: function(Value1, Value2, Step) {
+
 		// Set Max and Min
 		if (Value1 > Value2) { 
 			var Max = Value1;
@@ -68,6 +66,33 @@ var Random = {
 			var randomWithStep = this._round(((Math.random() * steppedRange) + Min), Step); 
 			return randomWithStep;
 		}
+	},
+
+	BetweenHex: function(Hex1, Hex2, Step) {
+		var validHex1 = RandomHelpers.hexPasser(Hex1);
+		var validHex2 = RandomHelpers.hexPasser(Hex2);
+		var privateStep = Step;
+		if (validHex1.length > validHex2.length) {
+			var finalLength = validHex1.length;
+		} else { 
+			var finalLength = validHex2.length;
+		}
+		var value1 = parseInt(validHex1, 16);
+		var value2 = parseInt(validHex2, 16);
+		var resultNumber = this.Between(value1, value2, privateStep);
+		var rawResultHex = resultNumber.toString(16);
+		if (rawResultHex.length == finalLength) {
+			var finalResultHex = rawResultHex;
+		} else if (rawResultHex.length < finalLength) {
+			var finalResultHex = rawResultHex.toString();
+			var lengthDiff = finalLength - rawResultHex.length;
+			for (i = 0; i < lengthDiff ; i++ ) {
+				finalResultHex = "0" + finalResultHex;
+			}
+		} else {
+			var finalResultHex = "I don't know if this can happen";
+		}
+		return finalResultHex;
 	}
 
 
